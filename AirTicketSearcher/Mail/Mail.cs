@@ -52,8 +52,10 @@ namespace AirTicketSearcher.Mail
 			//Be careful that the SmtpClient class is the one from Mailkit not the framework!
 			using (var emailClient = new MailKit.Net.Smtp.SmtpClient())
 			{
+				emailClient.ServerCertificateValidationCallback = (s,c,h,e) => true;
+				
 				//The last parameter here is to use SSL (Which you should!)
-				emailClient.Connect(this.emailConfig.smtpServer, this.emailConfig.port, true);
+				emailClient.Connect(this.emailConfig.smtpServer, this.emailConfig.port, MailKit.Security.SecureSocketOptions.Auto);
 		
 				//Remove any OAuth functionality as we won't be using it. 
 				emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
